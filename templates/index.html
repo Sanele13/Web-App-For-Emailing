@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Emailing App</title>
+    <script type="text/javascript">
+      function xhr_send() {
+        var request = new XMLHttpRequest(); //An XHR variable to avoid page reload
+        var result = document.getElementById('result');
+        request.onreadystatechange = function()
+        {
+          if(this.readyState == 4 && this.status == 200) {
+            result.innerHTML = this.responseText;
+          } else {
+            result.innerHTML = "";
+          }
+        }
+        request.open('POST', '/', true);
+        request.setRequestHeader('content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
+		//There's definitely a much better way to format the 'data'..., I need to figure that one out
+		var data = document.getElementById('name').value+"|"+document.getElementById('subject').value+"|"+document.getElementById('body').value; 
+        //passing the data to the Flask server usin XHR
+		request.send("data=" + data);
+      }
+    </script>
+  </head>
+  <body>
+    <form action="index" method="post">
+      <label>To:<br/><input type="text" id="name" value="" /></label><br/>
+	  <label>Subject:<br/><input type="text" id="subject" value="" /></label><br/>
+	  <label>Body:<br/><textarea type="text" id="body" ></textarea></label><br/>
+      <button type="button" id="btn-post" onclick="xhr_send();">Send</button>
+      <div id="result"></div> <!--This is where the result will be placed-->
+    </form>
+  </body>
+</html>
